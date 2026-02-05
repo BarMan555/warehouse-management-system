@@ -1,0 +1,38 @@
+# --- Специфично для .NET (Build outputs) ---
+[Bb]in/
+[Oo]bj/
+[Pp]ublish/
+
+# --- NuGet пакеты (их нужно восстанавливать, а не хранить в Git) ---
+node_modules/
+packages/
+*.nupkg
+
+# --- Настройки сред разработки (IDE) ---
+
+## Visual Studio
+.vs/
+*.user
+*.userosscache
+*.sln.docstates
+
+## JetBrains (Rider)
+.idea/
+*.sln.iml
+
+## VS Code
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# --- Локальные файлы конфигурации (секреты) ---
+appsettings.Development.json
+appsettings.Local.json
+*.pfx
+*.publishsettings
+
+# --- Системные файлы ---
+.DS_Store
+Thumbs.db
