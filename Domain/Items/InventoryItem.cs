@@ -1,4 +1,4 @@
-namespace AsyncWarehouse.Models.Items;
+namespace AsyncWarehouse.Domain.Items;
 
 /// <summary>
 /// Base class for all inventory items in the warehouse.

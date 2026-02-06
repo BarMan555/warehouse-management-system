@@ -1,4 +1,4 @@
-namespace AsyncWarehouse.Models.Items;
+namespace AsyncWarehouse.Domain.Items;
 
 /// <summary>
 /// Dimensions of the furniture item.
