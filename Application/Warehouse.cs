@@ -12,7 +12,7 @@ class Warehouse(IEnumerable<IDeliveryService> deliveryServices)
     public async Task ProcessIncomingOrdersAsync(CancellationToken ct)
     {
         var generator = new RandomItemGenerator();
-        var currentPallet = new Pallet<InventoryItem>(maxCapacity: 4000);
+        var currentPallet = new Pallet<InventoryItem>(maxCapacity: 999);
         
         while(!ct.IsCancellationRequested)
         {
@@ -25,7 +25,7 @@ class Warehouse(IEnumerable<IDeliveryService> deliveryServices)
             {
                 currentPallet.AddItem(item);
             }
-            catch(Exception)
+            catch(ArgumentException)
             {
                 Console.WriteLine("Паллета заполнена! Ищем службу доставки...");
 
@@ -35,12 +35,27 @@ class Warehouse(IEnumerable<IDeliveryService> deliveryServices)
                 if(service != null)
                 {
                     var palletToDeliv = currentPallet;
-                    currentPallet = new Pallet<InventoryItem>(4000);
+                    currentPallet = new Pallet<InventoryItem>(999);
+
+                    if(item.Weight < currentPallet.MaxCapacity)
+                    {
+                        currentPallet.AddItem(item);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Товар слишком тяжелый ({item.Weight}), не влезает даже в пустую паллету!");
+                    }
 
                     var task = Task.Run( () => service.DeliverAsync(palletToDeliv, ct), ct);
                     _deliveryTasks.Add(task);
 
                     _deliveryTasks.RemoveAll(t => t.IsCompleted || t.IsCanceled);
+                }
+                else
+                {
+                    Console.WriteLine($"Нет службы доставки для паллеты весом {weight} кг! Товар останется на складе.");
+                    currentPallet = new Pallet<InventoryItem>(999);
+                    currentPallet.AddItem(item); // Все равно пытаемся сохранить текущий товар
                 }
             }
 
