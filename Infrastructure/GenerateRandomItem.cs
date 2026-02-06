@@ -35,7 +35,7 @@ public class RandomItemGenerator : IItemGenerator
             {
                 Id = Guid.NewGuid(),
                 Name = $"Electronics Item {random.Next(1000)}",
-                Weight = random.Next(1, 100),
+                Weight = random.Next(1, 500),
                 Price = (decimal)(random.NextDouble() * 1000 + random.Next(1, 1000)),
                 SerialNumber = $"SN{random.Next(100000)}",
                 WarrantyMonths = random.Next(12, 36),
@@ -45,7 +45,7 @@ public class RandomItemGenerator : IItemGenerator
             {
                 Id = Guid.NewGuid(),
                 Name = $"Chemical Item {random.Next(1000)}",
-                Weight = random.Next(1, 100),
+                Weight = random.Next(1, 500),
                 Price = (decimal)(random.NextDouble() * 500 + random.Next(1, 500)),
                 Hazard = (HazardClass)random.Next(0, 4),
                 ExpirationDate = DateTime.UtcNow.AddDays(random.Next(30, 365)),
@@ -55,7 +55,7 @@ public class RandomItemGenerator : IItemGenerator
             {
                 Id = Guid.NewGuid(),
                 Name = $"Furniture Item {random.Next(1000)}",
-                Weight = random.Next(1, 100),
+                Weight = random.Next(1, 1000),
                 Price = (decimal)(random.NextDouble() * 100 + random.Next(1, 100)),
                 Material = $"Material {random.Next(1, 5)}",
                 Dimensions = new Demension(
