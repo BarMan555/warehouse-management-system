@@ -54,7 +54,7 @@ public class Pallet<T> where T : InventoryItem
     /// </summary>
     /// <param name="id">The unique identifier of the inventory item.</param>
     /// <returns>The inventory item if found, otherwise null.</returns>
-    public T? GetItemById(int id) => _items.FirstOrDefault(x => x.Id == id);
+    public T? GetItemById(Guid id) => _items.FirstOrDefault(x => x.Id == id);
 
     /// <summary>
     /// Retrieves the total number of inventory items currently on the pallet.

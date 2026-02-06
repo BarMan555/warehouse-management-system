@@ -8,7 +8,7 @@ public abstract class InventoryItem
     /// <summary>
     /// Unique identifier for the inventory item.
     /// </summary>
-    public required int Id { get; init; }
+    public required Guid Id { get; init; }
 
     /// <summary>
     /// Name of the inventory item.
