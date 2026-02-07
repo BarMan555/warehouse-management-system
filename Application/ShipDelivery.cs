@@ -3,10 +3,15 @@ using AsyncWarehouse.Infrastructure.Storage;
 
 namespace AsyncWarehouse.Application;
 
+/// <summary>
+/// Delivery service implementation for ship deliveries
+/// </summary>
 public class ShipDelivery : IDeliveryService
 {
+    /// <inheritdoc cref="IDeliveryService.CanHandle"/>
     public bool CanHandle(float weight) => 100.0f <= weight && weight < 1000.0f; 
     
+    /// <inheritdoc cref="IDeliveryService.DeliverAsync"/>
     public async Task DeliverAsync(Pallet<InventoryItem> pallet, CancellationToken ct = default)
     {
         // Simulate ship delivery logic here

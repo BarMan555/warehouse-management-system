@@ -4,11 +4,27 @@ using AsyncWarehouse.Infrastructure.Storage;
 
 namespace AsyncWarehouse.Application;
 
+/// <summary>
+/// Warehouse class responsible for processing incoming orders and managing deliveries
+/// </summary>
+/// <param name="deliveryServices"></param>
 class Warehouse(IEnumerable<IDeliveryService> deliveryServices)
 {
+    /// <summary>
+    /// List of available delivery services that the warehouse can use to dispatch orders
+    /// </summary>
     private readonly IEnumerable<IDeliveryService> _deliveryServices = deliveryServices;
+
+    /// <summary>
+    /// List of active delivery tasks that are currently running in the warehouse
+    /// </summary>
     private readonly List<Task> _deliveryTasks = new();
 
+    /// <summary>
+    /// Processes incoming orders asynchronously, managing pallets and dispatching deliveries
+    /// </summary>
+    /// <param name="ct">Cancellation token to stop processing orders</param>
+    /// <returns>A task that represents the asynchronous operation</returns>
     public async Task ProcessIncomingOrdersAsync(CancellationToken ct)
     {
         var generator = new RandomItemGenerator();

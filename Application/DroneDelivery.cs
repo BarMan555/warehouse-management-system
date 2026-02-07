@@ -4,12 +4,14 @@ using AsyncWarehouse.Infrastructure.Storage;
 namespace AsyncWarehouse.Application;
 
 /// <summary>
-/// Delivery service implementation for drone deliveries, simulating the delivery process with a delay to represent the time taken for the drone to deliver the items.
+/// Delivery service implementation for drone deliveries
 /// </summary>
 public class DroneDelivery : IDeliveryService
 {
+    /// <inheritdoc cref="IDeliveryService.CanHandle"/>
     public bool CanHandle(float weight) => weight < 5.0f; 
 
+    /// <inheritdoc cref="IDeliveryService.DeliverAsync"/>
     public async Task DeliverAsync(Pallet<InventoryItem> pallet, CancellationToken ct = default)
     {
         // Simulate drone delivery logic here
