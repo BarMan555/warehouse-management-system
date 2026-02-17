@@ -1,4 +1,4 @@
-namespace AsyncWarehouse.Domain.Items;
+namespace AsyncWarehouse.Domain.Models;
 
 /// <summary>
 /// Represents an electronic item in the inventory.

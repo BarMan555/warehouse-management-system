@@ -1,4 +1,4 @@
-namespace AsyncWarehouse.Domain.Items;
+namespace AsyncWarehouse.Domain.Models;
 
 /// <summary>
 /// Base class for all inventory items in the warehouse.
@@ -9,16 +9,21 @@ public abstract class InventoryItem
     /// Unique identifier for the inventory item.
     /// </summary>
     public required Guid Id { get; init; }
+    
+    /// <summary>
+    ///  Unique identifier of Pallet where is this item.
+    /// </summary>
+    public Guid PalletId { get; set; }
 
     /// <summary>
     /// Name of the inventory item.
     /// </summary>
-    public required string Name { get; set; }
+    public required string Name { get; init; }
 
     /// <summary>
     /// Weight of the inventory item in kilograms.
     /// </summary>
-    public required float Weight { get; set; }
+    public required float Weight { get; init; }
 
     /// <summary>
     /// Price of the inventory item in USD.
