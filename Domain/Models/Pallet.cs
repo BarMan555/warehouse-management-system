@@ -23,7 +23,7 @@ public class Pallet
     /// <summary>
     /// Maximum weight capacity of the pallet in kilograms.
     /// </summary>
-    public float MaxCapacity { get; }
+    public float MaxCapacity { get; private set; }
     
     /// <summary>
     /// Constructor for EF Core
