@@ -1,30 +1,19 @@
-using AsyncWarehouse.Domain.Items;
+using AsyncWarehouse.Domain.Models;
+using AsyncWarehouse.Domain.Enums;
 
 namespace AsyncWarehouse.Infrastructure;
 
 /// <summary>
-/// Interface for generating random inventory items.
-/// </summary>
-public interface IItemGenerator
-{
-    /// <summary>
-    /// Generates a random inventory item.
-    /// </summary>
-    /// <returns>A randomly generated inventory item.</returns>
-    InventoryItem GenerateRandomItem();
-}
-
-/// <summary>
 /// Implementation of IItemGenerator that generates random inventory items.
 /// </summary>
-public class RandomItemGenerator : IItemGenerator
+public static class RandomItemGenerator
 {
     /// <summary>
     /// Generates a random inventory item.
     /// </summary>
     /// <returns>A randomly generated inventory item.</returns>
     /// <exception cref="InvalidOperationException">Thrown when an invalid item type is generated.</exception>
-    public InventoryItem GenerateRandomItem()
+    public static InventoryItem GenerateRandomItem()
     {
         var random = new Random();
         int itemType = random.Next(3); 
@@ -58,7 +47,7 @@ public class RandomItemGenerator : IItemGenerator
                 Weight = random.Next(1, 1000),
                 Price = (decimal)(random.NextDouble() * 100 + random.Next(1, 100)),
                 Material = $"Material {random.Next(1, 5)}",
-                Dimensions = new Demension(
+                Dimensions = new Dimension(
                     Length: (float)(random.NextDouble() * 200 + 50),
                     Width: (float)(random.NextDouble() * 200 + 50),
                     Height: (float)(random.NextDouble() * 200 + 50)
