@@ -13,7 +13,7 @@ public abstract class InventoryItem
     /// <summary>
     ///  Unique identifier of Pallet where is this item.
     /// </summary>
-    public Guid PalletId { get; set; }
+    public Guid? PalletId { get; set; }
 
     /// <summary>
     /// Name of the inventory item.
@@ -39,4 +39,13 @@ public abstract class InventoryItem
     /// Date and time when the inventory item was created.
     /// </summary>
     public DateTimeOffset CreatedAt { get; init; } = DateTimeOffset.UtcNow;
+    
+    protected InventoryItem() { }
+    protected InventoryItem(string name, float weight, decimal price)
+    {
+        Id = Guid.NewGuid();
+        Name = name;
+        Weight = weight;
+        Price = price;
+    }
 }
