@@ -12,4 +12,14 @@ public class ApplicationContext : DbContext
         : base(options)
     {
     }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<InventoryItem>()
+            .HasDiscriminator<string>("ItemType")
+            .HasValue<Chemicals>("Chemical")
+            .HasValue<Electronics>("Electronics")
+            .HasValue<Furniture>("Furniture");
+    }
 }
