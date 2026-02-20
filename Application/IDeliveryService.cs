@@ -1,5 +1,4 @@
-using AsyncWarehouse.Domain.Items;
-using AsyncWarehouse.Infrastructure.Storage;
+using AsyncWarehouse.Domain.Models;
 
 namespace AsyncWarehouse.Application;
 
@@ -21,5 +20,5 @@ public interface IDeliveryService
     /// <param name="pallet">The pallet of inventory items to be delivered.</param>
     /// <param name="ct">Cancellation token to cancel the delivery operation if needed.</param>
     /// <returns>A task representing the asynchronous delivery operation.</returns>
-    public Task DeliverAsync(Pallet<InventoryItem> pallet, CancellationToken ct = default);
+    public Task DeliverAsync(Pallet pallet, CancellationToken ct = default);
 }
