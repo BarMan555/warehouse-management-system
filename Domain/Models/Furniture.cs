@@ -15,7 +15,7 @@ public class Furniture : InventoryItem
     /// <summary>
     /// Dimensions of the furniture item.
     /// </summary>
-    public required Demension Dimensions { get; set; }
+    public required Dimension Dimensions { get; set; }
 
     /// <summary>
     /// Indicates whether the furniture item requires assembly.
