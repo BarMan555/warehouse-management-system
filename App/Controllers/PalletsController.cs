@@ -1,5 +1,6 @@
 using AsyncWarehouse.Application;
 using AsyncWarehouse.Application.DTOs.CreateUpdateDTOs;
+using AsyncWarehouse.Application.DTOs.GetDTOs;
 using AsyncWarehouse.Domain.Enums;
 using AsyncWarehouse.Domain.Models;
 using AutoMapper;
@@ -39,9 +40,9 @@ public class PalletsController : ControllerBase
     /// <response code="404">If the pallet with the specified ID is not found.</response>
     [HttpGet]
     [Route("{id}")]
-    public async Task<ActionResult<Pallet>> GetPallet(Guid id)
+    public async Task<ActionResult<PalletGetDto>> GetPallet(Guid id)
     {
-        var pallet = await _warehouseService.GetPalletAsync(id);
+        var pallet = _mapper.Map<PalletGetDto>(await _warehouseService.GetPalletAsync(id));
         if (pallet == null) return NotFound($"Pallet not found. ID: {id} is invalid.");
 
         return pallet;
@@ -54,9 +55,9 @@ public class PalletsController : ControllerBase
     /// <response code="200">Returns the list of pallets.</response>
     /// <response code="404">If there are no pallets in the warehouse.</response>
     [HttpGet]
-    public async Task<ActionResult<List<Pallet>>> GetAllPallets()
+    public async Task<ActionResult<List<PalletGetDto>>> GetAllPallets()
     {
-        var pallets = await _warehouseService.GetAllPallets();
+        var pallets = _mapper.Map<List<PalletGetDto>>(await _warehouseService.GetAllPallets());
         return pallets.Count != 0 ? pallets : NotFound("Zero pallets in warehouse");
     }
 
