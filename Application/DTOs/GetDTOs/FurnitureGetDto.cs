@@ -1,15 +1,15 @@
-namespace AsyncWarehouse.Application.DTOs.CreateUpdateDTOs;
+namespace AsyncWarehouse.Application.DTOs.GetDTOs;
 
 /// <summary>
-/// DTO for creating or updating a Furniture item.
+/// DTO for retrieving a Furniture item.
 /// </summary>
-public class FurnitureCreateUpdateDto : InventoryItemCreateUpdateDto
+public class FurnitureGetDto : InventoryItemGetDto
 {
     /// <summary>
-    /// The material of the furniture.
+    /// Material of the furniture item.
     /// </summary>
-    public required string? Material { get; set; }
-    
+    public required string Material { get; set; }
+
     /// <summary>
     /// The length of the furniture in meters.
     /// </summary>
@@ -24,9 +24,9 @@ public class FurnitureCreateUpdateDto : InventoryItemCreateUpdateDto
     /// The height of the furniture in meters.
     /// </summary>
     public required float Height { get; set; }
-    
+
     /// <summary>
-    /// Indicates whether the furniture requires assembly.
+    /// Indicates whether the furniture item requires assembly.
     /// </summary>
-    public bool? RequiresAssembly { get; set; }
+    public bool RequiresAssembly { get; set; }
 }

@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace AsyncWarehouse.App.Controllers;
 
 
+/// <summary>
+/// Controller for managing pallets in the warehouse.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 public class PalletsController : ControllerBase
@@ -27,6 +30,13 @@ public class PalletsController : ControllerBase
         _mapper = mapper;
     }
 
+    /// <summary>
+    /// Retrieves a specific pallet by its unique identifier.
+    /// </summary>
+    /// <param name="id">The GUID of the pallet to retrieve.</param>
+    /// <returns>The found pallet.</returns>
+    /// <response code="200">Returns the requested pallet.</response>
+    /// <response code="404">If the pallet with the specified ID is not found.</response>
     [HttpGet]
     [Route("{id}")]
     public async Task<ActionResult<Pallet>> GetPallet(Guid id)
@@ -37,6 +47,12 @@ public class PalletsController : ControllerBase
         return pallet;
     }
 
+    /// <summary>
+    /// Retrieves a list of all pallets in the warehouse.
+    /// </summary>
+    /// <returns>A list of pallets.</returns>
+    /// <response code="200">Returns the list of pallets.</response>
+    /// <response code="404">If there are no pallets in the warehouse.</response>
     [HttpGet]
     public async Task<ActionResult<List<Pallet>>> GetAllPallets()
     {
@@ -44,6 +60,13 @@ public class PalletsController : ControllerBase
         return pallets.Count != 0 ? pallets : NotFound("Zero pallets in warehouse");
     }
 
+    /// <summary>
+    /// Creates a new pallet with a specified capacity.
+    /// </summary>
+    /// <param name="capacity">The maximum weight capacity of the pallet in kilograms.</param>
+    /// <returns>The GUID of the newly created pallet.</returns>
+    /// <response code="200">Returns the GUID of the created pallet.</response>
+    /// <response code="400">If the capacity is invalid.</response>
     [HttpPost]
     public async Task<ActionResult<Guid>> CreatePallet([FromQuery] float capacity)
     {
@@ -60,6 +83,14 @@ public class PalletsController : ControllerBase
         }
     }
 
+    /// <summary>
+    /// Adds an electronics item to a specific pallet.
+    /// </summary>
+    /// <param name="id">The GUID of the pallet.</param>
+    /// <param name="item">The electronics item to add.</param>
+    /// <returns>A confirmation message.</returns>
+    /// <response code="200">If the item was successfully added.</response>
+    /// <response code="400">If the item could not be added to the pallet.</response>
     [HttpPost]
     [Route("{id}/items/electronics")]
     public async Task<IActionResult> AddElectronicsToPallet(Guid id, [FromBody] ElectronicsCreateUpdateDto item)
@@ -68,6 +99,14 @@ public class PalletsController : ControllerBase
         return await AddItemToPallet(id, newItem);
     }
     
+    /// <summary>
+    /// Adds a furniture item to a specific pallet.
+    /// </summary>
+    /// <param name="id">The GUID of the pallet.</param>
+    /// <param name="item">The furniture item to add.</param>
+    /// <returns>A confirmation message.</returns>
+    /// <response code="200">If the item was successfully added.</response>
+    /// <response code="400">If the item could not be added to the pallet.</response>
     [HttpPost]
     [Route("{id}/items/furniture")]
     public async Task<IActionResult> AddFurnitureToPallet(Guid id, [FromBody] FurnitureCreateUpdateDto item)
@@ -76,6 +115,14 @@ public class PalletsController : ControllerBase
         return await AddItemToPallet(id, newItem);
     }
     
+    /// <summary>
+    /// Adds a chemicals item to a specific pallet.
+    /// </summary>
+    /// <param name="id">The GUID of the pallet.</param>
+    /// <param name="item">The chemicals item to add.</param>
+    /// <returns>A confirmation message.</returns>
+    /// <response code="200">If the item was successfully added.</response>
+    /// <response code="400">If the item could not be added to the pallet.</response>
     [HttpPost]
     [Route("{id}/items/chemicals")]
     public async Task<IActionResult> AddChemicalsToPallet(Guid id, [FromBody] ChemicalsCreateUpdateDto item)
