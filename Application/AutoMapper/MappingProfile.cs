@@ -37,5 +37,6 @@ public class MappingProfile : Profile
             .ForMember(dest => dest.HazardClass, opt => opt.MapFrom(src => (int)src.Hazard));
         
         CreateMap<Pallet, PalletGetDto>();
+        CreateMap<PalletCreateUpdateDto, Pallet>();
     }
 }
