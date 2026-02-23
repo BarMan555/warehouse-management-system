@@ -42,10 +42,10 @@ public class PalletsController : ControllerBase
     [Route("{id}")]
     public async Task<ActionResult<PalletGetDto>> GetPallet(Guid id)
     {
-        var pallet = _mapper.Map<PalletGetDto>(await _warehouseService.GetPalletAsync(id));
+        var pallet = await _warehouseService.GetPalletAsync(id);
         if (pallet == null) return NotFound($"Pallet not found. ID: {id} is invalid.");
 
-        return pallet;
+        return Ok(pallet);
     }
 
     /// <summary>
@@ -57,29 +57,29 @@ public class PalletsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<PalletGetDto>>> GetAllPallets()
     {
-        var pallets = _mapper.Map<List<PalletGetDto>>(await _warehouseService.GetAllPallets());
-        return pallets.Count != 0 ? pallets : NotFound("Zero pallets in warehouse");
+        var pallets = await _warehouseService.GetAllPallets();
+        return pallets.Count != 0 ? Ok(pallets) : NotFound("Zero pallets in warehouse");
     }
 
     /// <summary>
     /// Creates a new pallet with a specified capacity.
     /// </summary>
-    /// <param name="capacity">The maximum weight capacity of the pallet in kilograms.</param>
+    /// <param name="newPallet">The create-update dto for creating new pallet</param>
     /// <returns>The GUID of the newly created pallet.</returns>
-    /// <response code="200">Returns the GUID of the created pallet.</response>
+    /// <response code="201">Returns the created pallet.</response>
     /// <response code="400">If the capacity is invalid.</response>
     [HttpPost]
-    public async Task<ActionResult<Guid>> CreatePallet([FromQuery] float capacity)
+    public async Task<ActionResult<PalletGetDto>> CreatePallet([FromBody] PalletCreateUpdateDto palletDto)
     {
         try
         {
-            var palletId = await _warehouseService.CreatePalletAsync(capacity);
-            _logger.LogInformation($"Pallet has been successfully created: {palletId} - {capacity} kg");
-            return palletId;
+            var palletNew = await _warehouseService.CreatePalletAsync(palletDto);
+            _logger.LogInformation($"Pallet has been successfully created: {palletNew.Id} - {palletNew.MaxCapacity} kg");
+            return CreatedAtAction(nameof(CreatePallet), palletNew);
         }
         catch (ArgumentException e)
         {
-            _logger.LogError($"Unable to create pallet: {capacity}");
+            _logger.LogError($"Unable to create pallet: {palletDto.MaxCapacity} kg: {e.Message}");
             return BadRequest(e.Message);
         }
     }
@@ -94,10 +94,9 @@ public class PalletsController : ControllerBase
     /// <response code="400">If the item could not be added to the pallet.</response>
     [HttpPost]
     [Route("{id}/items/electronics")]
-    public async Task<IActionResult> AddElectronicsToPallet(Guid id, [FromBody] ElectronicsCreateUpdateDto item)
+    public async Task<IActionResult> AddElectronicsToPallet(Guid id, [FromBody] ElectronicsCreateUpdateDto itemDto)
     {
-        var newItem = _mapper.Map<Electronics>(item);
-        return await AddItemToPallet(id, newItem);
+        return await AddItemToPallet(id, itemDto);
     }
     
     /// <summary>
@@ -110,10 +109,9 @@ public class PalletsController : ControllerBase
     /// <response code="400">If the item could not be added to the pallet.</response>
     [HttpPost]
     [Route("{id}/items/furniture")]
-    public async Task<IActionResult> AddFurnitureToPallet(Guid id, [FromBody] FurnitureCreateUpdateDto item)
+    public async Task<IActionResult> AddFurnitureToPallet(Guid id, [FromBody] FurnitureCreateUpdateDto itemDto)
     {
-        var newItem = _mapper.Map<Furniture>(item);
-        return await AddItemToPallet(id, newItem);
+        return await AddItemToPallet(id, itemDto);
     }
     
     /// <summary>
@@ -126,13 +124,12 @@ public class PalletsController : ControllerBase
     /// <response code="400">If the item could not be added to the pallet.</response>
     [HttpPost]
     [Route("{id}/items/chemicals")]
-    public async Task<IActionResult> AddChemicalsToPallet(Guid id, [FromBody] ChemicalsCreateUpdateDto item)
+    public async Task<IActionResult> AddChemicalsToPallet(Guid id, [FromBody] ChemicalsCreateUpdateDto itemDto)
     {
-        var newItem = _mapper.Map<Chemicals>(item);
-        return  await AddItemToPallet(id, newItem);
+        return  await AddItemToPallet(id, itemDto);
     }
 
-    private async Task<IActionResult> AddItemToPallet(Guid id, InventoryItem item)
+    private async Task<IActionResult> AddItemToPallet(Guid id, InventoryItemCreateUpdateDto item)
     {
         var result = await _warehouseService.AddItemToPalletAsync(id, item);
 

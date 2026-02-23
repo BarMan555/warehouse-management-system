@@ -1,5 +1,8 @@
+using AsyncWarehouse.Application.DTOs.CreateUpdateDTOs;
+using AsyncWarehouse.Application.DTOs.GetDTOs;
 using AsyncWarehouse.Infrastructure;
 using AsyncWarehouse.Domain.Models;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 
 namespace AsyncWarehouse.Application;
@@ -10,44 +13,53 @@ namespace AsyncWarehouse.Application;
 public class WarehouseService
 {
     private readonly ApplicationContext _context;
+    private readonly IMapper _mapper;
 
-    public WarehouseService(ApplicationContext context)
+    public WarehouseService(ApplicationContext context, IMapper mapper)
     {
         _context = context;
+        _mapper = mapper;
     }
 
-    public async Task<Guid> CreatePalletAsync(float capacity)
+    public async Task<PalletGetDto> CreatePalletAsync(PalletCreateUpdateDto palletDto)
     {
-        var pallet = new Pallet(capacity);
-        _context.Pallets.Add(pallet);
+        var pallet = _mapper.Map<Pallet>(palletDto);
+        var newPallet = _mapper.Map<PalletGetDto>(await _context.Pallets.AddAsync(pallet));
         await _context.SaveChangesAsync();
-        return pallet.Id;
+        return newPallet;
     }
 
-    public async Task<Pallet?> GetPalletAsync(Guid palletId)
+    public async Task<PalletGetDto?> GetPalletAsync(Guid palletId)
     {
-        return await _context.Pallets
+        var pallet = await _context.Pallets
             .Include(p => p.Items)
             .FirstOrDefaultAsync(p => p.Id == palletId);
+        if (pallet == null)  return null;
+        return _mapper.Map<PalletGetDto>(pallet);
     }
 
-    public async Task<List<Pallet>> GetAllPallets()
+    public async Task<List<PalletGetDto>> GetAllPallets()
     {
-        return await _context.Pallets
+        var pallets = await _context.Pallets
             .Include(p => p.Items)
             .ToListAsync();
+        return _mapper.Map<List<PalletGetDto>>(pallets);        
     }
 
-    public async Task<bool> AddItemToPalletAsync(Guid palletId, InventoryItem item)
+    public async Task<bool> AddItemToPalletAsync(Guid palletId, InventoryItemCreateUpdateDto itemDto)
     {
-        var pallet = await GetPalletAsync(palletId);
-        if (pallet is null)
-            throw new NullReferenceException($"Pallet with id {palletId} not found");
+        var pallet = await _context.Pallets
+            .Include(p => p.Items)
+            .FirstOrDefaultAsync(p => p.Id == palletId);
+        
+        if (pallet == null)
+            throw new ArgumentException($"Pallet with id {palletId} not found");
+        
+        var item = _mapper.Map<InventoryItem>(itemDto);
 
         try
         {
             pallet.AddItem(item);
-            
             await _context.SaveChangesAsync();
             return true;
         }
