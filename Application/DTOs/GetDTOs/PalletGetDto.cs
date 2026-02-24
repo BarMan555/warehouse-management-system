@@ -1,5 +1,8 @@
 namespace AsyncWarehouse.Application.DTOs.GetDTOs;
 
+/// <summary>
+/// Data transfer object for retrieving pallet information, including its items and capacity.
+/// </summary>
 public class PalletGetDto
 {
     /// <summary>
