@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  postgres_db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: secret
+      POSTGRES_DB: warehouse
+    ports:
+      - "5432:5432" # Стандартный порт PostgreSQL
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:management
+    ports:
+      - "5670:5672"   # 5672 - внутренний порт RabbitMQ. Пробрасываем наружу как 5670, так как это указано в коде.
+      - "15672:15672" # Панель управления RabbitMQ (логин/пароль: guest/guest)
+    restart: unless-stopped
+
+volumes:
+  pgdata:
