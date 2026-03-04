@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using AsyncWarehouse.Application;
 using AsyncWarehouse.Application.AutoMapper;
+using AsyncWarehouse.Application.Workers;
 using AsyncWarehouse.Infrastructure;
 using AutoMapper;
 
@@ -36,6 +37,11 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
 });
 
 builder.Services.AddScoped<WarehouseService>();
+
+builder.Services.AddSingleton<IMessageProducer, RabbitMqProducer>();
+builder.Services.AddHostedService<TruckDeliveryWorker>();
+builder.Services.AddHostedService<ShipDeliveryWorker>();
+builder.Services.AddHostedService<DroneDeliveryWorker>();
 
 var app = builder.Build();
 
