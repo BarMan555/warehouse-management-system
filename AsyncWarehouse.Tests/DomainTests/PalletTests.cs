@@ -10,8 +10,10 @@ public class PalletTests
         // Arrange
         float invalidCapacity = 0f;
 
-        // Act & Assert
+        // Act
         var exception = Assert.Throws<ArgumentException>(() => new Pallet(invalidCapacity));
+        
+        // Assert
         Assert.Equal("Max capacity must be greater than zero.", exception.Message);
     }
 
@@ -53,8 +55,10 @@ public class PalletTests
             SerialNumber = "456" 
         };
 
-        // Act & Assert
+        // Act
         var exception = Assert.Throws<ArgumentException>(() => pallet.AddItem(heavyItem));
+        
+        // Assert
         Assert.Contains("must not exceed pallet capacity", exception.Message);
         Assert.Empty(pallet.Items); // Убеждаемся, что товар НЕ добавился
     }
