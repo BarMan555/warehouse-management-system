@@ -13,7 +13,7 @@ public abstract class InventoryItemGetDto
     /// <summary>
     ///  Unique identifier of Pallet where is this item.
     /// </summary>
-    public Guid? PalletId { get; set; }
+    public Guid PalletId { get; set; }
 
     /// <summary>
     /// Name of the inventory item.

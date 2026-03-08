@@ -22,7 +22,7 @@ namespace AsyncWarehouse.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("AsyncWarehouse.Api.Domain.Models.InventoryItem", b =>
+            modelBuilder.Entity("AsyncWarehouse.Domain.Models.InventoryItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -43,7 +43,7 @@ namespace AsyncWarehouse.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("PalletId")
+                    b.Property<Guid>("PalletId")
                         .HasColumnType("uuid");
 
                     b.Property<decimal>("Price")
@@ -63,7 +63,7 @@ namespace AsyncWarehouse.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("AsyncWarehouse.Api.Domain.Models.Pallet", b =>
+            modelBuilder.Entity("AsyncWarehouse.Domain.Models.Pallet", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -77,9 +77,9 @@ namespace AsyncWarehouse.Migrations
                     b.ToTable("Pallets");
                 });
 
-            modelBuilder.Entity("AsyncWarehouse.Api.Domain.Models.Chemicals", b =>
+            modelBuilder.Entity("AsyncWarehouse.Domain.Models.Chemicals", b =>
                 {
-                    b.HasBaseType("AsyncWarehouse.Api.Domain.Models.InventoryItem");
+                    b.HasBaseType("AsyncWarehouse.Domain.Models.InventoryItem");
 
                     b.Property<DateTimeOffset>("ExpirationDate")
                         .HasColumnType("timestamp with time zone");
@@ -93,9 +93,9 @@ namespace AsyncWarehouse.Migrations
                     b.HasDiscriminator().HasValue("Chemical");
                 });
 
-            modelBuilder.Entity("AsyncWarehouse.Api.Domain.Models.Electronics", b =>
+            modelBuilder.Entity("AsyncWarehouse.Domain.Models.Electronics", b =>
                 {
-                    b.HasBaseType("AsyncWarehouse.Api.Domain.Models.InventoryItem");
+                    b.HasBaseType("AsyncWarehouse.Domain.Models.InventoryItem");
 
                     b.Property<float>("PowerWatts")
                         .HasColumnType("real");
@@ -110,9 +110,9 @@ namespace AsyncWarehouse.Migrations
                     b.HasDiscriminator().HasValue("Electronics");
                 });
 
-            modelBuilder.Entity("AsyncWarehouse.Api.Domain.Models.Furniture", b =>
+            modelBuilder.Entity("AsyncWarehouse.Domain.Models.Furniture", b =>
                 {
-                    b.HasBaseType("AsyncWarehouse.Api.Domain.Models.InventoryItem");
+                    b.HasBaseType("AsyncWarehouse.Domain.Models.InventoryItem");
 
                     b.Property<string>("Material")
                         .IsRequired()
@@ -124,16 +124,18 @@ namespace AsyncWarehouse.Migrations
                     b.HasDiscriminator().HasValue("Furniture");
                 });
 
-            modelBuilder.Entity("AsyncWarehouse.Api.Domain.Models.InventoryItem", b =>
+            modelBuilder.Entity("AsyncWarehouse.Domain.Models.InventoryItem", b =>
                 {
-                    b.HasOne("AsyncWarehouse.Api.Domain.Models.Pallet", null)
+                    b.HasOne("AsyncWarehouse.Domain.Models.Pallet", null)
                         .WithMany("Items")
-                        .HasForeignKey("PalletId");
+                        .HasForeignKey("PalletId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("AsyncWarehouse.Api.Domain.Models.Furniture", b =>
+            modelBuilder.Entity("AsyncWarehouse.Domain.Models.Furniture", b =>
                 {
-                    b.OwnsOne("AsyncWarehouse.Api.Domain.Enums.Dimension", "Dimensions", b1 =>
+                    b.OwnsOne("AsyncWarehouse.Domain.Enums.Dimension", "Dimensions", b1 =>
                         {
                             b1.Property<Guid>("FurnitureId")
                                 .HasColumnType("uuid");
@@ -159,7 +161,7 @@ namespace AsyncWarehouse.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("AsyncWarehouse.Api.Domain.Models.Pallet", b =>
+            modelBuilder.Entity("AsyncWarehouse.Domain.Models.Pallet", b =>
                 {
                     b.Navigation("Items");
                 });

@@ -13,7 +13,7 @@ public class PalletGetDto
     /// <summary>
     /// List of inventory items currently on the pallet.
     /// </summary>
-    public List<InventoryItemGetDto> Items { get; set; }
+    public required List<InventoryItemGetDto> Items { get; set; }
 
     /// <summary>
     /// Maximum weight capacity of the pallet in kilograms.
