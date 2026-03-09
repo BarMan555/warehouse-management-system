@@ -1,3 +1,4 @@
+using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using AsyncWarehouse.Application;
 using AsyncWarehouse.Application.AutoMapper;
@@ -45,6 +46,14 @@ builder.Services.AddSingleton<IMessageProducer, RabbitMqProducer>();
 builder.Services.AddHostedService<TruckDeliveryWorker>();
 builder.Services.AddHostedService<ShipDeliveryWorker>();
 builder.Services.AddHostedService<DroneDeliveryWorker>();
+
+builder.Services.AddSwaggerGen(options =>
+{
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFilename);
+
+    options.IncludeXmlComments(xmlPath);
+});
 
 var app = builder.Build();
 
