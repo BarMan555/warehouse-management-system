@@ -1,4 +1,5 @@
 using System.Reflection;
+using AsyncWarehouse.Api.Endpoints;
 using Microsoft.EntityFrameworkCore;
 using AsyncWarehouse.Application;
 using AsyncWarehouse.Application.AutoMapper;
@@ -12,9 +13,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Выведет в консоль текущую среду
 Console.WriteLine($"Current Environment: {builder.Environment.EnvironmentName}");
-
-// Add support of Controllers
-builder.Services.AddControllers();
 
 var mapperConfig = new MapperConfiguration(config => 
     {
@@ -63,6 +61,6 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.MapControllers();
+app.MapPalletEndpoints();
 
 app.Run();
