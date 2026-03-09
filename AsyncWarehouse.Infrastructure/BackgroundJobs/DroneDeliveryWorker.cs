@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json;
 using AsyncWarehouse.Application.DTOs.Messages;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -74,10 +75,22 @@ public class DroneDeliveryWorker : BackgroundService
             // Создаем scope для работы с БД или scoped-сервисами
             using (var scope = _scopeFactory.CreateScope())
             {
-                // Пример: var context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+                 var context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+                 
+                 var pallet = await context.Pallets.FirstOrDefaultAsync(
+                     p => p.Id == dispatchData!.PalletId, 
+                     cancellationToken: stoppingToken);
 
-                // Имитация асинхронной полезной работы (например, HTTP запрос к логистической компании)
-                await Task.Delay(3000, stoppingToken);
+                 if (pallet == null)
+                 {
+                     _logger.LogWarning($"[Дрон] Палетка {dispatchData!.PalletId} не найдена в БД.");
+                     return; 
+                 }
+
+                 context.Pallets.Remove(pallet);
+                 await context.SaveChangesAsync(stoppingToken);
+                 
+                _logger.LogInformation($"[Дрон] Успешное удаление палетки {dispatchData!.PalletId} из БД");
             }
 
             _logger.LogInformation($"[Дрон] Палетка {dispatchData?.PalletId} обработана.");
