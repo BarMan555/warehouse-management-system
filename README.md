@@ -12,10 +12,10 @@
 
 Проект разделен на 4 основных слоя:
 
-* 📁 **[AsyncWarehouse.Domain](./AsyncWarehouse.Domain)** — Ядро системы. Содержит бизнес-сущности (`Pallet`, `InventoryItem`), строгую доменную логику (проверка веса, вместимости) и Value Objects/Enums. Не имеет внешних зависимостей.
-* 📁 **[AsyncWarehouse.Application](./AsyncWarehouse.Application)** — Слой сценариев использования (Use Cases). Содержит сервисы (`WarehouseService`), DTO, профили `AutoMapper` и абстракции (интерфейсы) репозиториев и брокеров сообщений.
-* 📁 **[AsyncWarehouse.Infrastructure](./AsyncWarehouse.Infrastructure)** — Слой реализации. Содержит `ApplicationContext` (EF Core), репозитории (`PalletRepository`), реализацию `RabbitMqProducer`, а также Consumers (фоновые воркеры) для обработки очередей доставки.
-* 📁 **[AsyncWarehouse.Api](./AsyncWarehouse.Api)** — Точка входа (Presentation Layer). Содержит REST-контроллеры, настройки Dependency Injection и Swagger-документацию.
+* 📁 **[WarehouseMS.Domain](./WarehouseMS.Domain)** — Ядро системы. Содержит бизнес-сущности (`Pallet`, `InventoryItem`), строгую доменную логику (проверка веса, вместимости) и Value Objects/Enums. Не имеет внешних зависимостей.
+* 📁 **[WarehouseMS.Application](./WarehouseMS.Application)** — Слой сценариев использования (Use Cases). Содержит сервисы (`WarehouseService`), DTO, профили `AutoMapper` и абстракции (интерфейсы) репозиториев и брокеров сообщений.
+* 📁 **[WarehouseMS.Infrastructure](./WarehouseMS.Infrastructure)** — Слой реализации. Содержит `ApplicationContext` (EF Core), репозитории (`PalletRepository`), реализацию `RabbitMqProducer`, а также Consumers (фоновые воркеры) для обработки очередей доставки.
+* 📁 **[WarehouseMS.Api](./WarehouseMS.Api)** — Точка входа (Presentation Layer). Содержит REST-контроллеры, настройки Dependency Injection и Swagger-документацию.
 
 ## 🛠 Технологический стек
 * **Язык/Платформа:** C# / .NET 10.0
@@ -45,17 +45,17 @@ docker compose up -d postgres_db rabbitmq
 
 Сгенерируйте миграцию:
 ```bash
-dotnet ef migrations add InitialCreate --project AsyncWarehouse.Infrastructure --startup-project AsyncWarehouse.Api
+dotnet ef migrations add InitialCreate --project WarehouseMS.Infrastructure --startup-project WarehouseMS.Api
 ```
 Примените структуру к базе данных:
 ```bash
-dotnet ef database update --project AsyncWarehouse.Infrastructure --startup-project AsyncWarehouse.Api
+dotnet ef database update --project WarehouseMS.Infrastructure --startup-project WarehouseMS.Api
 ```
 
 ### 3. Запуск API
 Запустите API проект через .NET CLI:
 ```bash
-dotnet run --project AsyncWarehouse.Api
+dotnet run --project WarehouseMS.Api
 ```
 После успешного запуска перейдите в браузере по адресу: http://localhost:5000/swagger для тестирования эндпоинтов.
 
